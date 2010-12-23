@@ -55,16 +55,34 @@ void setup() {
     isofield = new float[isofield_width][isofield_height];
     calculateIsofield();
 
-    size(isofield_width*4, isofield_height*4);
+    size(isofield_width*8, isofield_height*8);
     background(125);
     fill(255);
     smooth();
+    noLoop();
 }
 
 void draw() {
-    animateMetaballs();
+    //animateMetaballs();
     calculateIsofield();
     drawMetaballs();
+}
+
+void mousePressed() {
+    if (mouseX == 0) {
+	cx = 0;
+    } else {
+	cx = mouseX/8;
+    }
+    if (mouseY == 0) {
+	cy = 0;
+    } else {
+	cy = mouseY/8;
+    }
+    
+    metaballs[1].x = cx;
+    metaballs[1].y = cy;
+    redraw();
 }
 
 void animateMetaballs() {
@@ -80,8 +98,8 @@ void animateMetaballs() {
 }
 
 void drawMetaballs() {
-    for (int x = 0, ix = 0; x < isofield_width; ix+=4, x++) {
-    	for (int y = 0, iy = 0; y < isofield_height; iy+=4, y++) {
+    for (int x = 0, ix = 0; x < isofield_width; ix+=8, x++) {
+    	for (int y = 0, iy = 0; y < isofield_height; iy+=8, y++) {
     	    // Calcula influencia de cada metaball no pixel
 	    intensity = isofield[x][y];
 	    value = min(intensity*255,255);
@@ -93,7 +111,7 @@ void drawMetaballs() {
     	    // Desenha o pixel
     	    stroke(value);
     	    fill(value);
-    	    rect(ix,iy, 4,4);
+    	    rect(ix,iy, 8,8);
     	}
     }
 }
