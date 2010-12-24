@@ -8,6 +8,7 @@ int num_metaballs;
 float min_threshold;
 float max_threshold;
 float[][] isofield;
+int[][] squares;
 Metaball[] metaballs;
 
 class Metaball {
@@ -47,6 +48,31 @@ void calculateIsofield() {
     }
 }
 
+void marchingSquares() {
+    float threshold = min_threshold;
+    boolean[] v;
+    squares = new int[isofield_width-1][isofield_height-1];
+  
+    for (int x = 0; x < isofield_width-1; x++) {
+      for (int y = 0; y < isofield_height-1; y++, squares++) {
+        int type = 0;
+        // Calculando os vertices acima do threshold
+        if (isofield[x][y] >= threshold) {
+          squares[x][y] = squares[x][y] || 1;
+        }
+        if (isofield[x+1][y] >= threshold) {
+          squares[x][y] = squares[x][y] || 2;
+        }
+        if (isofield[x][y+1] >= threshold) {
+          squares[x][y] = squares[x][y] || 4;
+        }
+        if (isofield[x+1][y+1] >= threshold) {
+          squares[x][y] = squares[x][y] || 8;
+        }
+      }
+    }
+}
+
 void setup() {
     min_threshold = 0.85;
     max_threshold = 1.05;
@@ -65,6 +91,7 @@ void setup() {
     fill(255);
     smooth();
     noLoop();
+    noStroke();
 }
 
 void draw() {
@@ -107,20 +134,27 @@ void animateMetaballs() {
 void drawMetaballs() {
     float intensity;
     float value;
-    for (int x = 0, ix = 0; x < isofield_width; ix+=8, x++) {
-    	for (int y = 0, iy = 0; y < isofield_height; iy+=8, y++) {
-    	    // Calcula influencia de cada metaball no pixel
-	    intensity = isofield[x][y];
-	    //value = min(intensity*255,255);
-	     if (intensity >= min_threshold && intensity <= max_threshold) {
-	     	value = min(intensity*255,255);
-	     } else {
-	     	value = 0;
-	     }
-    	    // Desenha o pixel
-    	    stroke(value);
-    	    fill(value);
-    	    rect(ix,iy, 8,8);
+    for (int x = 0, ix = 0; x < isofield_width-1; ix+=8, x++) {
+    	for (int y = 0, iy = 0; y < isofield_height-1; iy+=8, y++) {
+          int type = squares[x][y];
+          switch (type) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+          }
     	}
     }
 }
